@@ -35,12 +35,6 @@ func countBits(bits []bool, valToCount bool) (number int) {
 	return
 }
 
-func TestFIPS_140_2_badInput(t *testing.T) {
-	if bits, err := BBS(1, 2, 0, 20000); bits != nil || err == nil {
-		t.Fatal("error was expected")
-	}
-}
-
 func TestFIPS140_2Level1(t *testing.T) {
 	bits, _ := BBS(90187, 31511, 3, 20000)
 
@@ -189,5 +183,11 @@ func TestTestingTools(t *testing.T) {
 	}
 	if !reflect.DeepEqual(expectedCountOnesSeries, actualCountOnesSeries) {
 		t.Errorf("expected counts to be %v, but got %v", expectedCountOnesSeries, expectedCountOnesSeries)
+	}
+}
+
+func TestBadInput(t *testing.T) {
+	if bits, err := BBS(1, 2, 0, 20000); bits != nil || err == nil {
+		t.Fatal("error was expected")
 	}
 }
