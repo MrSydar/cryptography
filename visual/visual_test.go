@@ -42,31 +42,33 @@ func savePNG(path string, img image.Image) error {
 	return nil
 }
 
-func TestGetImage(t *testing.T) {
-	s1 := readImage("s1.png")
-	s2 := readImage("s2.png")
+func TestGenerateAndCombineShares(t *testing.T) {
+	os.Remove("assets_test/s1.png")
+	os.Remove("assets_test/s2.png")
+	os.Remove("assets_test/combined.png")
 
-	img, err := GetImage(s1, s2)
-	if err != nil {
-		t.Fatalf("error was not expected: %v", err)
-	}
-
-	err = savePNG("combined.png", img)
-	if err != nil {
-		t.Fatalf("error was not expected: %v", err)
-	}
-}
-
-func TestGetShare(t *testing.T) {
-	img := readImage("original.png")
+	img := readImage("assets_test/original.png")
 	s1, s2 := GetShares(img)
 
-	err := savePNG("s1.png", s1)
+	err := savePNG("assets_test/s1.png", s1)
 	if err != nil {
 		t.Fatalf("error was not expected: %v", err)
 	}
 
-	err = savePNG("s2.png", s2)
+	err = savePNG("assets_test/s2.png", s2)
+	if err != nil {
+		t.Fatalf("error was not expected: %v", err)
+	}
+
+	s1 = readImage("assets_test/s1.png")
+	s2 = readImage("assets_test/s2.png")
+
+	img, err = GetImage(s1, s2)
+	if err != nil {
+		t.Fatalf("error was not expected: %v", err)
+	}
+
+	err = savePNG("assets_test/combined.png", img)
 	if err != nil {
 		t.Fatalf("error was not expected: %v", err)
 	}
