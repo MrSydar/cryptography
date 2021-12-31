@@ -2,7 +2,6 @@ package util
 
 import (
 	"errors"
-	"fmt"
 	"math/big"
 	"math/rand"
 	"reflect"
@@ -57,35 +56,31 @@ func RandomPrimitiveRoot(modulo int64) (int64, error) {
 		return a
 	}
 
-	var coprimes []int64
+	coprimes := make(map[int64]bool)
 	for num := int64(1); num < modulo; num++ {
 		if gcd(num, modulo) == 1 {
-			coprimes = append(coprimes, num)
+			coprimes[num] = true
 		}
 	}
 
-	primitiveRoots := make([]int64, 0)
+	primRoots := make([]int64, 0)
 
-	for g := int64(1); g < modulo; g++ {
-		var actual_set []int64
+	for potentialPrimRoot := int64(1); potentialPrimRoot < modulo; potentialPrimRoot++ {
+		potentialPrimRootSet := make(map[int64]bool)
+
 		for powers := int64(1); powers < modulo; powers++ {
-			x := new(big.Int).Exp(big.NewInt(g), big.NewInt(powers), big.NewInt(modulo))
-			actual_set = append(actual_set, x.Int64())
+			x := new(big.Int).Exp(big.NewInt(potentialPrimRoot), big.NewInt(powers), big.NewInt(modulo))
+			potentialPrimRootSet[x.Int64()] = true
 		}
 
-		if reflect.DeepEqual(coprimes, actual_set) {
-			primitiveRoots = append(primitiveRoots, g)
-		} else {
-			fmt.Println("For primitive root", g, "set is", actual_set)
+		if reflect.DeepEqual(coprimes, potentialPrimRootSet) {
+			primRoots = append(primRoots, potentialPrimRoot)
 		}
 	}
 
-	fmt.Println("For modulo", modulo, "coprimes are", coprimes)
-
-	if len(primitiveRoots) == 0 {
+	if len(primRoots) == 0 {
 		return 0, errors.New("no primitive roots found")
 	} else {
-		return PickRandomN64(primitiveRoots), nil
+		return PickRandomN64(primRoots), nil
 	}
-
 }
