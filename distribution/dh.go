@@ -1,6 +1,7 @@
 package distribution
 
 import (
+	"fmt"
 	"math/big"
 	"mrsydar/cryptography/util"
 )
@@ -21,7 +22,7 @@ func NewDiffieHellman(primeNumberVariety, primitiveRootVariety int) (*DiffieHell
 
 	dh.n = big.NewInt(util.RandomPrimeNumber(primeNumberVariety))
 
-	if g, err := util.RandomPrimitiveRoot(dh.n.Int64(), primitiveRootVariety); err != nil {
+	if g, err := util.RandomPrimitiveRoot(dh.n.Int64()); err == nil {
 		dh.g = big.NewInt(g)
 	} else {
 		return nil, err
@@ -30,7 +31,7 @@ func NewDiffieHellman(primeNumberVariety, primitiveRootVariety int) (*DiffieHell
 	dh.privateKey = big.NewInt(util.GetRandomN64(1, dh.n.Int64()-int64(1)))
 	dh.PublicKey = new(big.Int).Exp(dh.g, dh.privateKey, dh.n)
 
-	// fmt.Println(dh.n, dh.g, dh.privateKey.Int64(), dh.PublicKey.Int64())
+	fmt.Println(dh.n, dh.g, dh.privateKey.Int64(), dh.PublicKey.Int64())
 
 	return &dh, nil
 }

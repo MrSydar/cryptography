@@ -8,7 +8,7 @@ import (
 func TestDH(t *testing.T) {
 	dh1, err := NewDiffieHellman(10, 5)
 	if err != nil {
-		t.Fatalf("no error expected, but got %v", err)
+		t.Fatalf("no error expected, but got %q", err)
 	}
 
 	dh2, err := NewDiffieHellman(10, 5)
