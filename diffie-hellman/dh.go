@@ -1,4 +1,4 @@
-package distribution
+package dh
 
 import (
 	"math/big"
